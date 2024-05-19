@@ -14,13 +14,16 @@ class Renderer:
         cv.setWindowProperty("Chip-8 Emulator", cv.WND_PROP_FULLSCREEN, cv.WINDOW_FULLSCREEN)
         cv.waitKey(0)
 
-    def update_display(self, pixel, val):
+    def update_display(self, row, col, val):
         # first update the display array with val
 
+        self.display[row, col] = val
 
-        # once the display is updated, then update the current OpenCV window
-        pass
+    def render(self):
+        # depending on the FPS decided, call this function at a given frequency
+        # to update the visible display from time to time
 
+        cv.imshow("Chip-8 Emulator", self.display)
 
     def quit(self):
         # close down opencv
