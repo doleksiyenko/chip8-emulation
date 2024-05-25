@@ -18,9 +18,6 @@ class Chip8:
         self.cpu = CPU()
         self.running = False
 
-        pygame.init()
-
-
     def start(self):
         """
         Enter the main Fetch / Decode / Execute loop of the Chip8
@@ -28,7 +25,11 @@ class Chip8:
         self.running = True
 
         while self.running:
-            self.close()
+            self.renderer.clear_screen()
+
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    self.close()
 
     def close(self):
         self.renderer.quit()
