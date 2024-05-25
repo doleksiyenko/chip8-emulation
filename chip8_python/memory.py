@@ -7,7 +7,7 @@ class Memory:
     def __init__(self):
         # we want to store 4Kb of data, assume that each int can store at
         # most 1 byte of info.
-        self.memory = [0] * 4096
+        self.memory = [0x0] * 4096
 
         # the limitation in previous interpreters is that the stack would be of limited
         # size stored in the 4 Kb of memory, but don't need to face this limitation since
@@ -43,5 +43,5 @@ class Memory:
         """
         pass
 
-    def get_instruction(self, loc) -> str:
+    def get_instruction(self, loc) -> int:
         return self.memory[loc]        

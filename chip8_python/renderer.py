@@ -9,9 +9,9 @@ class Renderer:
         
         # initialize the pygame window
         self.display = pygame.display.set_mode((64, 32)) 
-
+        
     def clear_screen(self):
-        self.display.fill('purple')
+        self.display.fill('black')
         pygame.display.flip()
 
     def update_display(self, row, col, val):
