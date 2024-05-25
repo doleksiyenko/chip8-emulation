@@ -37,9 +37,11 @@ class Memory:
         for i in range(len(font)):
             self.memory[i] = font[i]
 
-    def load_program(self, ROM):
+    def load_program(self, ROM) -> None:
         """
         A Chip-8 program is loaded into memory starting at address 0x200 (512) 
         """
         pass
 
+    def get_instruction(self, loc) -> str:
+        return self.memory[loc]        

@@ -1,3 +1,5 @@
+import pygame
+
 from renderer import Renderer
 from memory import Memory
 from clock import Clock
@@ -16,10 +18,12 @@ class Chip8:
         self.cpu = CPU()
         self.running = False
 
+        pygame.init()
+
 
     def start(self):
         """
-        Enter the ain Fetch / Decode / Execute loop of the Chip8
+        Enter the main Fetch / Decode / Execute loop of the Chip8
         """
         self.running = True
 
