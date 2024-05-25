@@ -9,6 +9,11 @@ class Memory:
         # most 1 byte of info.
         self.memory = [0] * 4096
 
+        # the limitation in previous interpreters is that the stack would be of limited
+        # size stored in the 4 Kb of memory, but don't need to face this limitation since
+        # we're simply emulating the function
+        self.stack = []
+
         # when the memory is created, load the system font into memory
         # reserve first 80 bytes for font
 
