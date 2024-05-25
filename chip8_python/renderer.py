@@ -14,9 +14,15 @@ class Renderer:
         self.display.fill('black')
         pygame.display.flip()
 
-    def update_display(self, row, col, val):
-        # first update the display array with val
+    def set_color_at_pixel(self, row: int, col: int, val: bool):
+        """
+        Set the pixel at position <row, col> to on/off depending on the value of
+        <val>
+        """
         pass
+
+    def get_color_at_pixel(self, row: int, col: int):
+        pass 
 
     def quit(self):
         # quit pygame
