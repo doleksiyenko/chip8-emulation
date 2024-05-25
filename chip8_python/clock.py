@@ -7,7 +7,7 @@ class Clock:
     check if enough time has passed to run the next frame, otherwise delay.
     """
     def __init__(self, frame_rate: int) -> None:
-        self.frame_rate = 1 / frame_rate 
+        self.rate = 1 / frame_rate 
         self.prev_time = time.time()
     
     def tick(self) -> None:
