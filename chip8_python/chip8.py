@@ -33,12 +33,14 @@ class Chip8:
 
         self.renderer.render()
         while self.running:
+            # fetch, decode and execute the instruction at the pc
+            self.cpu.cycle()
 
+            # run a clock that 
             # if the 'x' is pressed on the window, close the emulator 
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     self.close()
-
 
             # wait if sufficient time has not passed
             self.clock.tick()
