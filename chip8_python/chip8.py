@@ -7,15 +7,20 @@ from cpu import CPU
 from sound import Sound
 
 class Chip8:
-    def __init__(self):
+    def __init__(self, ROM):
+        # create RAM and load the ROM into RAM
         self.memory = Memory()
+        self.memory.load_program(ROM=ROM)
+
+        # create Renderer, CPU and Sound modules
         self.renderer = Renderer()
         self.sound = Sound()
-
-        # run the CPU at 700 instructions per second
-        self.clock = Clock(rate=700)
-
         self.cpu = CPU(memory=self.memory, renderer=self.renderer)
+
+        # run the CPU at 720 instructions per second (720 / 12 == 60, for 
+                                                    # renderer clock)
+        self.clock = Clock(rate=720)
+
         self.running = False
 
     def start(self):
