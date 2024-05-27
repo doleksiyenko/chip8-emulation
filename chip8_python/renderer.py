@@ -30,7 +30,7 @@ class Renderer:
         Return 0 if the display is black and 1 if the display is white
         at the given pixel at location <row, col>
         """
-        return True if self.display.get_at((row, col)) == self.white else False
+        return True if self.display.get_at((col, row)) == self.white else False
 
 
     def render(self):

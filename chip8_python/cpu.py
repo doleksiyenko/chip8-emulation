@@ -38,7 +38,7 @@ class CPU:
         hex_val = "0x" + format(instruction_byte1, '02x') + format(instruction_byte2, '02x') 
 
         # return the 2 byte instruction as a hex value (int)
-        return int(hex_val) 
+        return int(hex_val, 16) 
 
 
     def __decode_execute(self, instruction: int) -> None:
@@ -114,7 +114,7 @@ class CPU:
                     # memory address of Nth byte of sprite data
                     memory_address = self.i_register + offset 
                     sprite_byte = self.memory.get_instruction(memory_address) 
-                    sprite_byte = bin(sprite_byte)[2:]
+                    sprite_byte = format(sprite_byte, '08b') 
 
                     # increment through all of the bits of this byte of sprite 
                     # data
