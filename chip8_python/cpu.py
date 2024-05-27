@@ -51,20 +51,37 @@ class CPU:
                         # clear the screen
                         self.renderer.clear_screen() 
                     case 0x00EE:
-                        # return from subroutine
-                        pass
+                        # return from subroutine by getting the saved pc from the stack
+                        self._pc = self.memory.stack.pop() 
             case 0x1000:
                 # jump instruction, set the program counter to final three 
                 # numbers of hex
                 self._pc = instruction & 0x0fff 
             case 0x2000:
-                pass
+                # call to a subroutine - first add the pc to the stack, then set pc
+                self.memory.stack.append(self._pc)
+                self._pc = instruction & 0x0fff
             case 0x3000:
-                pass
+                # skip one 2 byte instruction if vx is equal to NN in 3XNN
+                val = instruction & 0x00ff 
+                vx = self.registers[instruction & 0x0f00]
+
+                if val == vx:
+                    self._pc += 2
             case 0x4000:
-                pass
+                # skip one 2 byte instruction if vx is NOT equal to NN in 4XNN 
+                val = instruction & 0x00ff
+                vx = self.registers[instruction & 0x0f00]
+
+                if val != vx:
+                    self._pc += 2
             case 0x5000:
-                pass
+                # skip one 2 byte instruction if VX and VY are equal in 5XY0 
+                vx = self.registers[instruction & 0x0f00]
+                vy = self.registers[instruction & 0x00f0]
+
+                if vx == vy:
+                    self._pc += 2
             case 0x6000:
                 # set register VX to NN where instruction in form 0x6XNN 
                 x = (instruction & 0x0f00) >> 8
@@ -74,9 +91,94 @@ class CPU:
                 x = (instruction & 0x0f00) >> 8
                 self.registers[x] += instruction & 0x00ff
             case 0x8000:
-                pass
+                # the 8XYn instructions are logical + arithmetic instructions
+                # decoded based on the last 4 bits
+                
+                vx = self.registers[instruction & 0x0f00]
+                vy = self.registers[instruction & 0x00f0]
+
+                match instruction & 0x000f:
+                    case 0x0000:
+                        # set VX to VY
+                        self.registers[instruction & 0x0f00] = vy   
+                    case 0x0001:
+                        # vx = vx | vy
+                        self.registers[instruction & 0x0f00] = vx | vy
+                    case 0x0002:
+                        # vx = vx & vy
+                        self.registers[instruction & 0x0f00] = vx & vy
+                    case 0x0003:
+                        # vx = vx xor vy
+                        self.registers[instruction & 0x0f00] = vx ^ vy
+                    case 0x0004:
+                        # vx = vx + vy (with overflow detection)
+                        total = vx + vy
+
+                        if total > 255:
+                            # set vf to 1
+                            self.registers[0xf] = 1
+                        else:
+                            self.registers[0xf] = 0
+
+                        self.registers[instruction & 0x0f00] = (vx + vy) % 256
+                    case 0x0005:
+                        # vx = vx - vy 
+                        self.registers[instruction & 0x0f00] = (vx - vy) % 256
+
+                        # if we underflow, then set the VF register to 0
+                        if vx > vy:
+                            self.registers[0xf] = 1
+                        else:
+                            self.registers[0xf] = 0
+
+                    case 0x0006:
+                        # shift one bit to the right
+                        # furthermore, implements original CHIP-8 for COSMIC VIP instruction, first
+                        # setting VX to the value at VY
+                        
+                        # get the bit to be shifted out of vx (last bit)
+                        if vy % 2 == 0:
+                            # then last bit is 0
+                            self.registers[0xf] = 0
+                        else:
+                            # then last bit is 1
+                            self.registers[0xf] = 1
+
+                        # shift vx (= vy) to the right
+                        self.registers[instruction & 0x0f00] = vy >> 1
+
+                    case 0x0007:
+                        # vx = vy - vx 
+                        self.registers[instruction & 0x0f00] = (vy - vx) % 256
+
+                        # if we underflow, then set the VF register to 0
+                        if vy > vx:
+                            self.registers[0xf] = 1
+                        else:
+                            self.registers[0xf] = 0
+                    case 0x000e:
+                        # shift one bit to the left  
+                        # furthermore, implements original CHIP-8 for COSMIC VIP instruction, first
+                        # setting VX to the value at VY
+
+                        # get the bit to be shifted out of vx (first bit), and we know this register is
+                        # 8 bits
+                        if (vy & 0x80) >> 7 == 0:
+                            # then last bit is 0
+                            self.registers[0xf] = 0
+                        else:
+                            # then last bit is 1
+                            self.registers[0xf] = 1
+
+                        # shift vx (= vy) to the right (crop to 8 bits)
+                        self.registers[instruction & 0x0f00] = (vy << 1) & 0xff
             case 0x9000:
-                pass
+                # skip one 2 byte instruction if VX and VY are NOT equal in 9XY0 
+                vx = self.registers[instruction & 0x0f00]
+                vy = self.registers[instruction & 0x00f0]
+
+                if vx != vy:
+                    self._pc += 2
             case 0xa000:
                 # set the index register to NNN, where instruction is 0xANNN  
                 self.i_register = instruction & 0x0fff
