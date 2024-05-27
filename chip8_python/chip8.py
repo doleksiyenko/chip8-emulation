@@ -21,6 +21,9 @@ class Chip8:
                                                     # renderer clock)
         self.clock = Clock(rate=720)
 
+        # run the renderer clock at 60 fps
+        self.renderer_clock = Clock(rate=60)
+
         self.running = False
 
     def start(self):
@@ -41,6 +44,9 @@ class Chip8:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     self.close()
+
+            if self.renderer_clock.elapsed():
+                self.renderer.render()
 
             # wait if sufficient time has not passed
             self.clock.tick()

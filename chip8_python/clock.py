@@ -13,8 +13,20 @@ class Clock:
     def tick(self) -> None:
         # check the current time vs the previous time, if enough time has passed since the last frame, 
         # then return
-        if time.time() - self.prev_time < self.rate:
+        time_diff = time.time() - self.prev_time 
+        if time_diff < self.rate:
             # wait
-            time.sleep(self.rate - (time.time() - self.prev_time)) 
+            time.sleep(self.rate - (time_diff)) 
 
         self.prev_time = time.time()
+
+    def elapsed(self) -> bool:
+        """
+        Return True on the condition that enough time has passed since the last frame, otherwise Return False
+        """
+        if time.time() - self.prev_time < self.rate:
+            return False
+        else:
+            # update the time so that next time we check elapsed() we do not always return True
+            self.prev_time = time.time()
+            return True
