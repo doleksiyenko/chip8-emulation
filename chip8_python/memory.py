@@ -71,5 +71,8 @@ class Memory:
 
         print(self)
                 
-    def get_instruction(self, loc) -> int:
+    def get_from_memory(self, loc) -> int:
         return self.memory[loc]        
+    
+    def set_memory(self, loc, val) -> None:
+        self.memory[loc] = val

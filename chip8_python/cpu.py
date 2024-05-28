@@ -40,8 +40,8 @@ class CPU:
 
     def __fetch(self) -> int:
         # chip 8 instuctions are two bytes long
-        instruction_byte1 = self.memory.get_instruction(self._pc)
-        instruction_byte2 = self.memory.get_instruction(self._pc + 1)
+        instruction_byte1 = self.memory.get_from_memory(self._pc)
+        instruction_byte2 = self.memory.get_from_memory(self._pc + 1)
 
         # increment the pc by two bytes 
         self._pc += 2
@@ -231,7 +231,7 @@ class CPU:
                 for offset in range(col_len):
                     # memory address of Nth byte of sprite data
                     memory_address = self.i_register + offset 
-                    sprite_byte = self.memory.get_instruction(memory_address) 
+                    sprite_byte = self.memory.get_from_memory(memory_address) 
                     sprite_byte = format(sprite_byte, '08b') 
 
                     # increment through all of the bits of this byte of sprite 
@@ -307,4 +307,22 @@ class CPU:
                             # go back to this same instruction (block)
                             self._pc -= 2
 
+                    case 0x0029:
+                        # set index register to location of font of hexadecimal character in memory
+                        # each font character is 5 bytes ()
+                        self.i_register = self.memory.get_from_memory(5 * vx)
 
+                    case 0x0033:
+                        # binary coded decimal conversion (convert the number stored in vx to 3
+                        # decimal digits)
+                        self.memory.set_memory(loc=self.i_register + 0, val=(vx // 100) % 10)
+                        self.memory.set_memory(loc=self.i_register + 1, val=(vx // 10) % 10)
+                        self.memory.set_memory(loc=self.i_register + 2, val=(vx // 10 % 10))
+
+                    case 0x0055:
+                        pass
+                    case 0x0065:
+                        pass
+
+
+                        
