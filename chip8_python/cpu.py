@@ -15,10 +15,11 @@ class CPU:
         self.i_register = 0x0 # the index register 
         self.registers = [0x0] * 16
 
-        self.delay_timer = 0
+        self._delay_timer = 0
         # create pointers to the rest of the hardware components
         self.memory = memory
         self.renderer = renderer 
+        self.sound = sound
 
     def cycle(self) -> None:
         """
@@ -33,7 +34,7 @@ class CPU:
         """
         Decrement the delay timer
         """
-        self.delay_timer -= 1
+        self._delay_timer -= 1
 
     def __fetch(self) -> int:
         # chip 8 instuctions are two bytes long
@@ -270,5 +271,17 @@ class CPU:
                                         # skip the 2 byte instruction
                                         self._pc += 2 
             case 0xf000:
-                pass
+                
+                vx = self.registers[(instruction & 0x0f00) >> 8]
+
+                match instruction & 0x00ff:
+                    case 0x0007:
+                        # set vx register equal to the delay timer
+                        self.registers[(instruction & 0x0f00) >> 8] = self._delay_timer
+                    case 0x0015:
+                        # set the delay timer to value in register
+                        self._delay_timer = vx 
+                    case 0x0018:
+                        # set the sound timer to value in register
+                        self.sound.set_timer(vx) 
 

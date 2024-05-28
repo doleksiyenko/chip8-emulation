@@ -33,23 +33,23 @@ class Chip8:
         self.running = True
         # set the screen to black to start with
         self.renderer.clear_screen()
-
         self.renderer.render()
 
         while self.running:
             # fetch, decode and execute the instruction at the pc
             self.cpu.cycle()
             
+            # update all modules that rely on 60Hz clock
+            if self.renderer_clock.elapsed():
+                self.renderer.render()
+                self.sound.decrement_timer()
+                self.cpu.decrement_timer()
+
             # run a clock that 
             # if the 'x' is pressed on the window, close the emulator 
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     self.close()
-
-            if self.renderer_clock.elapsed():
-                self.renderer.render()
-                self.sound.decrement_timer()
-                self.cpu.decrement_timer()
 
             # wait if sufficient time has not passed (for a CPU cycle)
             self.clock.tick()
