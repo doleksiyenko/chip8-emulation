@@ -320,9 +320,14 @@ class CPU:
                         self.memory.set_memory(loc=self.i_register + 2, val=(vx // 10 % 10))
 
                     case 0x0055:
-                        pass
+                        registers = self.registers[0: ((instruction & 0x0f00) >> 8) + 1] 
+                        for i, register in enumerate(registers):
+                            self.memory.set_memory(loc=self.i_register + i, val=register)
+
                     case 0x0065:
-                        pass
+                        x = (instruction & 0x0f00) >> 8
+                        for i in range(x + 1):
+                            self.registers[i] = self.memory.get_from_memory(loc=self.i_register + i)
 
 
                         
