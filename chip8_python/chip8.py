@@ -15,7 +15,7 @@ class Chip8:
         # create Renderer, CPU and Sound modules
         self.renderer = Renderer()
         self.sound = Sound()
-        self.cpu = CPU(memory=self.memory, renderer=self.renderer)
+        self.cpu = CPU(memory=self.memory, renderer=self.renderer, sound=self.sound)
 
         # run the CPU at 720 instructions per second (720 / 12 == 60, for 
                                                     # renderer clock)
@@ -48,8 +48,10 @@ class Chip8:
 
             if self.renderer_clock.elapsed():
                 self.renderer.render()
+                self.sound.decrement_timer()
+                self.cpu.decrement_timer()
 
-            # wait if sufficient time has not passed
+            # wait if sufficient time has not passed (for a CPU cycle)
             self.clock.tick()
 
     def close(self):

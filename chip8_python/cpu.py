@@ -4,16 +4,18 @@ import pygame
 
 from memory import Memory
 from renderer import Renderer
+from sound import Sound
 """
 A class for handling the CPU operations for the CHIP-8
 """
 class CPU:
-    def __init__(self, memory: Memory, renderer: Renderer) -> None:
+    def __init__(self, memory: Memory, renderer: Renderer, sound: Sound) -> None:
         self._pc = 0x200 # program counter register, program always loads in at
                          # address 200
         self.i_register = 0x0 # the index register 
-
         self.registers = [0x0] * 16
+
+        self.delay_timer = 0
         # create pointers to the rest of the hardware components
         self.memory = memory
         self.renderer = renderer 
@@ -26,6 +28,12 @@ class CPU:
         instruction = self.__fetch()
         # decode and execute the instruction
         self.__decode_execute(instruction)
+
+    def decrement_timer(self) -> None:
+        """
+        Decrement the delay timer
+        """
+        self.delay_timer -= 1
 
     def __fetch(self) -> int:
         # chip 8 instuctions are two bytes long
