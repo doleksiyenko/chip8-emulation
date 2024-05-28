@@ -102,7 +102,7 @@ class CPU:
             case 0x7000:
                 # add value to register VX, where instruction in form 0x7XNN 
                 x = (instruction & 0x0f00) >> 8
-                self.registers[x] += instruction & 0x00ff
+                self.registers[x] = (self.registers[x] + (instruction & 0x00ff)) % 256
             case 0x8000:
                 # the 8XYn instructions are logical + arithmetic instructions
                 # decoded based on the last 4 bits
@@ -317,7 +317,7 @@ class CPU:
                         # decimal digits)
                         self.memory.set_memory(loc=self.i_register + 0, val=(vx // 100) % 10)
                         self.memory.set_memory(loc=self.i_register + 1, val=(vx // 10) % 10)
-                        self.memory.set_memory(loc=self.i_register + 2, val=(vx // 10 % 10))
+                        self.memory.set_memory(loc=self.i_register + 2, val=(vx // 1) % 10)
 
                     case 0x0055:
                         registers = self.registers[0: ((instruction & 0x0f00) >> 8) + 1] 
