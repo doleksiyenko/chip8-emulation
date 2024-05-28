@@ -5,6 +5,8 @@ import pygame
 from memory import Memory
 from renderer import Renderer
 from sound import Sound
+from clock import Clock
+
 """
 A class for handling the CPU operations for the CHIP-8
 """
@@ -284,4 +286,25 @@ class CPU:
                     case 0x0018:
                         # set the sound timer to value in register
                         self.sound.set_timer(vx) 
+                    case 0x001e:
+                        # add vx to the index register (check for overflow from 0x0fff to 0x1000, set vf accordingly)
+                        if (self.i_register + vx > 0x0fff):
+                            self.registers[0xf] = 1
+                        else:
+                            self.register[0xf] = 0
+                        self.i_register += vx
+                    case 0x000a:
+                        # a blocking instruction until a key is pressed.
+                        for event in pygame.event.get():
+                            if event.type == pygame.KEYUP:
+                                # get the key that the hexidecimal key corresponds to
+                                if (event.key in self.memory.key_hex):
+                                    # set vx to the key being held
+                                    self.registers[(instruction & 0x0f00) >> 8] = self.memory.key_hex[event.key] 
+                                    # do not execute the else statement
+                                    break
+                        else:
+                            # go back to this same instruction (block)
+                            self._pc -= 2
+
 

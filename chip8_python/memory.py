@@ -42,6 +42,10 @@ class Memory:
                            0x4: pygame.key.key_code("q"), 0x5: pygame.key.key_code("w"), 0x6: pygame.key.key_code("e"), 0x7: pygame.key.key_code("r"), \
                            0x8: pygame.key.key_code("a"), 0x9: pygame.key.key_code("s"), 0xa: pygame.key.key_code("d"), 0xb: pygame.key.key_code("f"), \
                            0xc: pygame.key.key_code("z"), 0xd: pygame.key.key_code("x"), 0xe: pygame.key.key_code("c"), 0xf: pygame.key.key_code("v")}
+
+        # create a hex loop up for a keycode
+        self.key_hex = dict((v,k) for k,v in self.valid_keys.items())
+
         # store font in the front of the memory
         for i in range(len(font)):
             self.memory[i] = font[i]
