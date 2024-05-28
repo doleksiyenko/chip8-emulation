@@ -1,4 +1,6 @@
 from typing import Tuple
+import random
+import pygame
 
 from memory import Memory
 from renderer import Renderer
@@ -184,10 +186,11 @@ class CPU:
                 self.i_register = instruction & 0x0fff
             case 0xb000:
                 # instruction BNNN - jump with offset, jump to address NNN with offset stored in v0 
-                v0 = self.registers[0]
-                pass
+                self._pc = self.registers[0] + instruction & 0x0fff
             case 0xc000:
-                pass
+                # generate a random number and bitwise and it with NN 
+                rand_val = (instruction & 0x00ff) & (random.random() * (instruction & 0x00ff))
+                self.registers[(instruction & 0x0f00) >> 8] = rand_val
             case 0xd000:
                 # set the display at coordinates X and Y, instruction is DXYN
                 # x and y coords from the registers, modulo the size of 
@@ -239,7 +242,25 @@ class CPU:
                                 # the pixel is off, so turn it on, keep vf at 0
                                 self.renderer.set_color_at_pixel(row=y_coord, col=x_coord, val=True)
             case 0xe000:
-                pass
+                # e based instructions are skip-if key is being pressed
+                # first, get the hexadecimal code for the key being stored in vx, 0-f
+                instruction_key = (instruction & 0x0f00) >> 8 
+                for event in pygame.event.get():
+                    if event.type == pygame.KEYDOWN:
+                        # get the key that the hexidecimal key corresponds to
+                        if (instruction_key in self.memory.valid_keys):
+                            # check the key being pressed is the key that vx holds
+                            match instruction & 0x000f:
+                                case 0x000e:
+                                    # instruction skips if key is equal to the instruction key
+                                    if event.key == self.memory.valid_keys[instruction_key]: 
+                                        # skip the 2 byte instruction
+                                        self._pc += 2 
+                                case 0x0001:
+                                    # instruction skips if key is NOT equal to the instruction key
+                                    if event.key != self.memory.valid_keys[instruction_key]: 
+                                        # skip the 2 byte instruction
+                                        self._pc += 2 
             case 0xf000:
                 pass
 

@@ -1,4 +1,5 @@
 import binascii
+import pygame
 
 class Memory:
     """
@@ -18,7 +19,7 @@ class Memory:
 
         # when the memory is created, load the system font into memory
         # reserve first 80 bytes for font
-
+        
         font = [0xF0, 0x90, 0x90, 0x90, 0xF0,
                 0x20, 0x60, 0x20, 0x20, 0x70, 
                 0xF0, 0x10, 0xF0, 0x80, 0xF0, 
@@ -36,6 +37,12 @@ class Memory:
                 0xF0, 0x80, 0xF0, 0x80, 0xF0, 
                 0xF0, 0x80, 0xF0, 0x80, 0x80] 
         
+        # these are the valid keypresses for the keyboard (with their correspondences in hexadecimal)
+        self.valid_keys = {0x0: pygame.key.key_code("1"), 0x1: pygame.key.key_code("2"), 0x2: pygame.key.key_code("3"), 0x3: pygame.key.key_code("4"), \
+                           0x4: pygame.key.key_code("q"), 0x5: pygame.key.key_code("w"), 0x6: pygame.key.key_code("e"), 0x7: pygame.key.key_code("r"), \
+                           0x8: pygame.key.key_code("a"), 0x9: pygame.key.key_code("s"), 0xa: pygame.key.key_code("d"), 0xb: pygame.key.key_code("f"), \
+                           0xc: pygame.key.key_code("z"), 0xd: pygame.key.key_code("x"), 0xe: pygame.key.key_code("c"), 0xf: pygame.key.key_code("v")}
+        # store font in the front of the memory
         for i in range(len(font)):
             self.memory[i] = font[i]
 
