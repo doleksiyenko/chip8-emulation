@@ -35,6 +35,7 @@ class Chip8:
         self.renderer.clear_screen()
 
         self.renderer.render()
+
         while self.running:
             # fetch, decode and execute the instruction at the pc
             self.cpu.cycle()
