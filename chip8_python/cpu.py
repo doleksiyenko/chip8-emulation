@@ -200,7 +200,7 @@ class CPU:
                 self._pc = self.registers[0] + instruction & 0x0fff
             case 0xc000:
                 # generate a random number and bitwise and it with NN 
-                rand_val = (instruction & 0x00ff) & (random.random() * (instruction & 0x00ff))
+                rand_val = (instruction & 0x00ff) & int((random.random() * (instruction & 0x00ff)))
                 self.registers[(instruction & 0x0f00) >> 8] = rand_val
             case 0xd000:
                 # set the display at coordinates X and Y, instruction is DXYN
