@@ -291,7 +291,7 @@ class CPU:
                         if (self.i_register + vx > 0x0fff):
                             self.registers[0xf] = 1
                         else:
-                            self.register[0xf] = 0
+                            self.registers[0xf] = 0
                         self.i_register += vx
                     case 0x000a:
                         # a blocking instruction until a key is pressed.
