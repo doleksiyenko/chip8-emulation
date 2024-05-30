@@ -296,7 +296,10 @@ class CPU:
                     case 0x000a:
                         # a blocking instruction until a key is pressed.
                         for event in pygame.event.get():
-                            if event.type == pygame.KEYUP:
+                            if event.type == pygame.QUIT:
+                                pygame.quit()
+                                exit(0)
+                            elif event.type == pygame.KEYUP:
                                 # get the key that the hexidecimal key corresponds to
                                 if (event.key in self.memory.key_hex):
                                     # set vx to the key being held
