@@ -3,4 +3,16 @@ project(chip8emulator)
 
 set(CMAKE_CXX_STANDARD 20)
 
-add_subdirectory(src)
+include_directories(include)
+
+set(SourceFiles
+    src/main.cpp
+    src/chip8.cpp
+    src/renderer.cpp
+    src/memory.cpp)
+
+find_package(SDL2 REQUIRED)
+include_directories(${SDL2_INCLUDE_DIRS})
+
+add_executable(${PROJECT_NAME} ${SourceFiles})
+target_link_libraries(${PROJECT_NAME} ${SDL2_LIBRARIES})
