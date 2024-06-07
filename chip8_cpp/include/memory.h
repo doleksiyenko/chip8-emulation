@@ -1,8 +1,8 @@
 #ifndef MEMORY_H
 #define MEMORY_H
 
-using namespace std;
-
+#include <cstdint>
+#include <string>
 
 class Memory {
     public:
@@ -12,7 +12,7 @@ class Memory {
         void set_memory(int memory_loc);
 
     private:
-        unsigned char* memory;
+        uint8_t memory[4096];
 };
 
 #endif
