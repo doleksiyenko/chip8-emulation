@@ -2,8 +2,6 @@
 #include "renderer.h"
 #include <iostream>
 
-using namespace std;
-
 void Renderer::createWindow() {
     if (SDL_Init(SDL_INIT_VIDEO) != 0) {
         std::cout << "Error: "  << SDL_GetError();
