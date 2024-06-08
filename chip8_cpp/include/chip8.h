@@ -1,13 +1,16 @@
 #ifndef CHIP8_H
 #define CHIP8_H
 
+#include "renderer.h" 
+
 class Chip8 {
     public:
-        Chip8();
-        void start_emulator();
-        void quit_emulator();
+        void run();
     private:
-        bool running = false;
+        bool running = true; // when the Chip8 system is created, start it running by default
+        
+        // hardware components
+        Renderer renderer;
 };
 
 #endif
