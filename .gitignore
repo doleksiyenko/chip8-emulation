@@ -1,3 +1,6 @@
 chip8_cpp/build
 .vscode
 cmake-build-debug
+.DS_Store
+chip8_cpp/.idea
+.cache

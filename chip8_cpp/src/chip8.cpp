@@ -5,7 +5,6 @@
 #include "renderer.h"
 
 void Chip8::run() {
-
     // main emulation loop
     // running starts intialized as true
     while (running) {
@@ -32,4 +31,3 @@ void Chip8::run() {
     // quit sdl - close the renderer and window 
     renderer.quit();
 }
-

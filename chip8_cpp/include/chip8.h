@@ -2,6 +2,7 @@
 #define CHIP8_H
 
 #include "renderer.h" 
+#include "memory.h"
 
 class Chip8 {
     public:
@@ -11,6 +12,7 @@ class Chip8 {
         
         // hardware components
         Renderer renderer;
+        Memory memory;
 };
 
 #endif
