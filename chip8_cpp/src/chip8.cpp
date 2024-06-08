@@ -5,24 +5,31 @@
 #include "renderer.h"
 
 void Chip8::run() {
-    // SDL event handler
-    SDL_Event event; 
-    while (SDL_PollEvent(&event)) {
-        switch (event.type) {
-            case SDL_QUIT:
-                exit(0);
-                break;
-            default:
-                break;
+
+    // main emulation loop
+    // running starts intialized as true
+    while (running) {
+        // event handling
+        SDL_Event event; 
+        while (SDL_PollEvent(&event)) {
+            switch (event.type) {
+                case SDL_QUIT:
+                    running = false;
+                    break;
+                default:
+                    break;
+            }
         }
 
-        SDL_Delay(5000);
-        renderer.quit();
+        // drawing
+        renderer.clear_screen();
+        renderer.render();
+
+        // delay so that game runs at reasonable frame rate
+        SDL_Delay(16);
     }
 
-
-    // SDL_Delay(5000);
-    // // quit sdl - close the renderer and window 
-    // renderer.quit();
+    // quit sdl - close the renderer and window 
+    renderer.quit();
 }
 

@@ -22,6 +22,10 @@ void Renderer::clear_screen() {
     SDL_RenderClear(renderer);
 }
 
+void Renderer::render() {
+    SDL_RenderPresent(renderer);
+}
+
 void Renderer::quit() {
     // quit out of all SDL processes
     SDL_DestroyRenderer(renderer);
