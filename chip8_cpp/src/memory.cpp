@@ -57,8 +57,7 @@ void Memory::set_memory(int memory_loc, uint8_t val) {
 
 void Memory::load_ROM(std::string file_path) {
     std::ifstream rom_file;
-
-    rom_file.open(file_path, std::ios::binary | std::ios::in); 
+    rom_file.open(file_path, std::ios::binary);
 
     if (!rom_file) {
         // error opening the file
@@ -71,7 +70,11 @@ void Memory::load_ROM(std::string file_path) {
     uint8_t byte;
     
     // read bytes from file one by one, and insert them into <location>
-    
+    while (rom_file.read(reinterpret_cast<char*>(&byte), sizeof(byte))) {
+        memory[location] = byte;
+        location++;
+    }
+
     // while (rom_file >> std::noskipws >> byte) {
     //     memory[location] = byte;
     //     location++;
