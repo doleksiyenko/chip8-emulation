@@ -3,6 +3,7 @@
 
 #include "renderer.h" 
 #include "memory.h"
+#include "cpu.h"
 
 class Chip8 {
     public:
@@ -13,6 +14,7 @@ class Chip8 {
         // hardware components
         Renderer renderer;
         Memory memory;
+        CPU cpu{&memory, &renderer};
 };
 
 #endif

@@ -9,6 +9,7 @@ set(SourceFiles
         src/main.cpp
         src/chip8.cpp
         src/renderer.cpp
+        src/cpu.cpp
         src/memory.cpp
         include/memory.h
         include/cpu.h

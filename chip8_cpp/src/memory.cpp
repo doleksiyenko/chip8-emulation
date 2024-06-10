@@ -71,10 +71,10 @@ void Memory::load_ROM(std::string file_path) {
     uint8_t byte;
     
     // read bytes from file one by one, and insert them into <location>
-    while (rom_file >> byte) {
-        memory[location] = byte;
-        location++;
-    } 
-
+    
+    // while (rom_file >> std::noskipws >> byte) {
+    //     memory[location] = byte;
+    //     location++;
+    // } 
     rom_file.close();
 }

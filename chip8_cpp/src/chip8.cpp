@@ -3,6 +3,7 @@
 
 #include "chip8.h"
 #include "renderer.h"
+#include "cpu.h"
 
 void Chip8::run(std::string file_path) {
     // load in the ROM provided as a command line argument
@@ -12,6 +13,8 @@ void Chip8::run(std::string file_path) {
     // main emulation loop
     // running starts intialized as true
     while (running) {
+        // run a single cycle of the CPU (read one 16 byte instruction)
+        cpu.cycle(); 
         // event handling
         SDL_Event event; 
         while (SDL_PollEvent(&event)) {
