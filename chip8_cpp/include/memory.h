@@ -13,7 +13,7 @@ class Memory {
         int get_from_memory(int memory_loc);
         void set_memory(int memory_loc, uint8_t val);
     private:
-        std::array<uint8_t, 4096> memory;
+        std::array<uint8_t, 4096> memory{};
     friend std::ostream& operator<<(std::ostream& stream, const Memory& obj);
 };
 
