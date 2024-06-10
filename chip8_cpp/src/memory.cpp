@@ -32,6 +32,22 @@ Memory::Memory() {
     std::copy(font.begin(), font.end(), memory.begin());
 }
 
+// overload the << operator so that we can print a representation of the memory object
+std::ostream& operator<<(std::ostream& stream, const Memory& obj) {
+    for (int i = 0; i < obj.memory.size(); i ++) {
+        if (i % 8 == 0) {
+            stream << "0x" << std::hex << i << ":";
+        }
+
+        stream << obj.memory[i]; 
+
+        if (i % 8 == 0) {
+            stream << std::endl;
+        }
+    } 
+    return stream;
+}
+
 int Memory::get_from_memory(int memory_loc) {
     return memory[memory_loc];
 }

@@ -4,7 +4,10 @@
 #include "chip8.h"
 #include "renderer.h"
 
-void Chip8::run() {
+void Chip8::run(std::string file_path) {
+    // load in the ROM provided as a command line argument
+    // memory.load_ROM(file_path);
+    std::cout << memory << std::endl;
     // main emulation loop
     // running starts intialized as true
     while (running) {

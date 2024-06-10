@@ -6,7 +6,7 @@
 
 class Chip8 {
     public:
-        void run();
+        void run(std::string file_path);
     private:
         bool running = true; // when the Chip8 system is created, start it running by default
         
