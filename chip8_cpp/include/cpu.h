@@ -1,6 +1,7 @@
 #ifndef CPU_H
 #define CPU_H
 
+#include <array>
 #include <cstdint>
 #include <stack>
 
@@ -14,10 +15,10 @@ class CPU {
         void decrement_timer();
     private:
         uint16_t pc; // program counters
-        std::stack stack;
+        std::stack<uint8_t> stack;
         // registers
         uint16_t i_register;
-        uint8_t var_registers[16]; 
+        std::array<uint8_t, 16> var_registers{}; 
         uint8_t delay_timer;
 
 };
