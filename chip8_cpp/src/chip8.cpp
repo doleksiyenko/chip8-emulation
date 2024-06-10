@@ -6,7 +6,8 @@
 
 void Chip8::run(std::string file_path) {
     // load in the ROM provided as a command line argument
-    // memory.load_ROM(file_path);
+    memory.load_ROM(file_path);
+    // show the contents of memory in the terminal
     std::cout << memory << std::endl;
     // main emulation loop
     // running starts intialized as true

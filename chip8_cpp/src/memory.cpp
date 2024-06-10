@@ -34,17 +34,16 @@ Memory::Memory() {
 
 // overload the << operator so that we can print a representation of the memory object
 std::ostream& operator<<(std::ostream& stream, const Memory& obj) {
-    for (int i = 0; i < obj.memory.size(); i ++) {
+    for (int i = 0; i < obj.memory.size(); i++) {
         if (i % 8 == 0) {
-            stream << "0x" << std::hex << i << ":";
+            stream << std::endl << "0x" << std::hex << i << ":";
         }
 
-        stream << obj.memory[i]; 
-
-        if (i % 8 == 0) {
-            stream << std::endl;
-        }
+        uint8_t byte = obj.memory[i];
+        stream << std::hex << unsigned(byte) << " ";
+        
     } 
+
     return stream;
 }
 
