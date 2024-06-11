@@ -4,3 +4,4 @@ cmake-build-debug
 .DS_Store
 chip8_cpp/.idea
 .cache
+chip8_python/__pycache__
