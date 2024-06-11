@@ -13,9 +13,15 @@ CPU::CPU(Memory* chip8_memory, Renderer* chip8_renderer) {
     CPU::chip8_renderer = chip8_renderer; 
 }
 
+void CPU::decrement_timer() {
+    delay_timer--;
+}
+
 void CPU::cycle() {
+    // first get the instruction
     uint16_t instruction = fetch();
-    std::cout << std::hex << int(instruction) << std::endl;
+    // using the fetched instruction, run the proper function from linked hardware
+    decode_execute(instruction);
 }
 
 uint16_t CPU::fetch() {
@@ -23,16 +29,48 @@ uint16_t CPU::fetch() {
     uint8_t instruction_byte1 = chip8_memory->get_from_memory(pc);
     uint8_t instruction_byte2 = chip8_memory->get_from_memory(pc + 1);
     uint16_t instruction = (instruction_byte1 << 8) + (instruction_byte2);
-    
     // after reading the instructions, increment the pc immediately
     pc += 2;
     return instruction; 
 }
 
-void CPU::decode_execute(uint8_t instruction) {
-
-}
-
-void CPU::decrement_timer() {
-
+void CPU::decode_execute(uint16_t instruction) {
+    switch (instruction & 0xf000) {
+        case 0x0000:
+            if (instruction == 0x00e0) {
+                // 00e0: clear the screen
+                chip8_renderer->clear_screen();
+            }
+            break; 
+        case 0x1000:
+            break; 
+        case 0x2000:
+            break; 
+        case 0x3000:
+            break; 
+        case 0x4000:
+            break; 
+        case 0x5000:
+            break; 
+        case 0x6000:
+            break; 
+        case 0x7000:
+            break; 
+        case 0x8000:
+            break; 
+        case 0x9000:
+            break; 
+        case 0xa000:
+            break; 
+        case 0xb000:
+            break; 
+        case 0xc000:
+            break; 
+        case 0xd000:
+            break; 
+        case 0xe000:
+            break;
+        case 0xf000:
+            break; 
+    }
 }

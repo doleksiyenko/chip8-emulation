@@ -17,8 +17,8 @@ Renderer::Renderer() {
 }
 
 void Renderer::clear_screen() {
-    // set draw color to blue and then paint the screen
-    SDL_SetRenderDrawColor(renderer, 3, 123, 117, SDL_ALPHA_OPAQUE);
+    // set draw color to black and then paint the screen
+    SDL_SetRenderDrawColor(renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
     SDL_RenderClear(renderer);
 }
 

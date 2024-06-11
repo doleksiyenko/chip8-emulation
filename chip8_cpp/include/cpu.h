@@ -16,7 +16,7 @@ class CPU {
 
     private:
         uint16_t fetch(); // fetch instruction from memory
-        void decode_execute(uint8_t instruction); // decode and then execute instruction
+        void decode_execute(uint16_t instruction); // decode and then execute instruction
         void decrement_timer();
 
     private:

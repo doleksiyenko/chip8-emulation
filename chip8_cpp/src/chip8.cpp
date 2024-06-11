@@ -28,7 +28,6 @@ void Chip8::run(std::string file_path) {
         }
 
         // drawing
-        renderer.clear_screen();
         renderer.render();
 
         // delay so that game runs at reasonable frame rate
