@@ -74,10 +74,6 @@ void Memory::load_ROM(std::string file_path) {
         memory[location] = byte;
         location++;
     }
-
-    // while (rom_file >> std::noskipws >> byte) {
-    //     memory[location] = byte;
-    //     location++;
-    // } 
+ 
     rom_file.close();
 }
