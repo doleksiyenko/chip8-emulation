@@ -76,48 +76,53 @@ void CPU::decode_execute(uint16_t instruction) {
             break; 
         case 0xc000:
             break; 
-        case 0xd000:
-            {
-                // draw to display instruction
-                // get the X and Y coordinates from the VX and VY registers
-                uint8_t vx = var_registers_[(instruction & 0x0f00) >> 8] % SCREEN_WIDTH; 
-                uint8_t vy = var_registers_[(instruction & 0x00f0) >> 4] % SCREEN_HEIGHT; 
-
-                // set the VF register to 0
-                var_registers_[0xf] = 0x0;
-
-                // cap the columns/rows to be drawn if the rows/cols exceed the screen size
-                uint8_t row_len = 8;
-                if (row_len + vx >= SCREEN_WIDTH) {
-                    row_len = SCREEN_WIDTH - vx;
-                }
-
-                // sprite to be drawn has N bytes of data col_len = N
-                uint8_t col_len = instruction & 0x000f;
-                if (col_len + vy >= SCREEN_HEIGHT) {
-                    col_len = SCREEN_HEIGHT - vy;
-                }
-
-                // for every possible column val (every byte of the sprite)
-                for (int offset = 0; offset < col_len; offset++){
-                    uint8_t sprite_byte = memory_->get_from_memory(i_register_ + offset);
-                    // increment through each bit of byte of sprite data
-                    for (int bit = 0; bit < row_len; bit++) {
-                        // get one bit at a time, starting from the MSB
-                        uint8_t sprite_bit = sprite_byte & (1 << (7 - bit)) >> (7 - bit); 
-                        uint8_t y = vy + offset; // y coordinate on display
-                        uint8_t x = vx + bit; // x coordinate on display
-
-                        if (sprite_bit == 1) {
-                                // TODO: implement rendering logic based on colour of the pixel
-                        }
-                    }
-                }
-            }
-            break; 
         case 0xe000:
             break;
         case 0xf000:
+            break;
+        case 0xd000:
+            // draw to display instruction
+            // get the X and Y coordinates from the VX and VY registers
+            uint8_t vx = var_registers_[(instruction & 0x0f00) >> 8] % SCREEN_WIDTH; 
+            uint8_t vy = var_registers_[(instruction & 0x00f0) >> 4] % SCREEN_HEIGHT; 
+
+            // set the VF register to 0
+            var_registers_[0xf] = 0x0;
+
+            // cap the columns/rows to be drawn if the rows/cols exceed the screen size
+            uint8_t row_len = 8;
+            if (row_len + vx >= SCREEN_WIDTH) {
+                row_len = SCREEN_WIDTH - vx;
+            }
+
+            // sprite to be drawn has N bytes of data col_len = N
+            uint8_t col_len = instruction & 0x000f;
+            if (col_len + vy >= SCREEN_HEIGHT) {
+                col_len = SCREEN_HEIGHT - vy;
+            }
+
+            // for every possible column val (every byte of the sprite)
+            for (int offset = 0; offset < col_len; offset++){
+                uint8_t sprite_byte = memory_->get_from_memory(i_register_ + offset);
+                // increment through each bit of byte of sprite data
+                for (int bit = 0; bit < row_len; bit++) {
+                    // get one bit at a time, starting from the MSB
+                    uint8_t sprite_bit = (sprite_byte & (1 << (7 - bit))) >> (7 - bit); 
+                    uint8_t y = vy + offset; // y coordinate on display
+                    uint8_t x = vx + bit; // x coordinate on display
+
+                    if (sprite_bit == 1) {
+                        if (renderer_->get_pixel_is_on(x, y)) {
+                            renderer_->set_pixel(x, y, false);
+                            var_registers_[0xf] = 1;
+                        }
+                        else {
+                            renderer_->set_pixel(x, y, true);
+                        }
+                    }
+                }
+                renderer_->render();
+            }
             break; 
     }
 }

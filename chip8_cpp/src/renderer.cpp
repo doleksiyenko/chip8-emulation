@@ -46,7 +46,6 @@ void Renderer::set_pixel(unsigned int x, unsigned int y, bool status) {
 }
 
 void Renderer::render() {
-    set_pixel(10, 10, true);
     SDL_RenderPresent(renderer_);
 
 }
