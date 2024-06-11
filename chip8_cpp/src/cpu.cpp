@@ -43,6 +43,8 @@ void CPU::decode_execute(uint16_t instruction) {
             }
             break; 
         case 0x1000:
+            // jump instruction to set PC to final bytes of hex 
+            pc = instruction & 0x0fff;
             break; 
         case 0x2000:
             break; 
@@ -53,14 +55,20 @@ void CPU::decode_execute(uint16_t instruction) {
         case 0x5000:
             break; 
         case 0x6000:
+            // set register VX to NN, from instruction 6XNN
+            var_registers[(instruction & 0x0f00) >> 8] = instruction & 0x00ff;
             break; 
         case 0x7000:
+            // add NN to value in register VX, from instruction 7XNN
+            // without setting the carry flag
+            var_registers[(instruction & 0x0f00) >> 8] += instruction & 0x00ff;
             break; 
         case 0x8000:
             break; 
         case 0x9000:
             break; 
         case 0xa000:
+            i_register = instruction & 0x0fff;
             break; 
         case 0xb000:
             break; 
