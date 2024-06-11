@@ -1,5 +1,9 @@
 #include <SDL2/SDL.h>
 #include "renderer.h"
+#include <SDL_pixels.h>
+#include <SDL_render.h>
+#include <SDL_surface.h>
+#include <cstdint>
 #include <iostream>
 
 Renderer::Renderer() {
@@ -22,8 +26,29 @@ void Renderer::clear_screen() {
     SDL_RenderClear(renderer_);
 }
 
+bool Renderer::get_pixel_is_on(unsigned int x, unsigned int y) {
+    return pixel_status_[x + (y * SCREEN_WIDTH)]; 
+}
+
+void Renderer::set_pixel(unsigned int x, unsigned int y, bool status) {
+    if (status == true) {
+        // set the pixel to white
+        SDL_SetRenderDrawColor(renderer_, 255, 255, 255, SDL_ALPHA_OPAQUE);
+        SDL_RenderDrawPoint(renderer_, x, y);
+    } 
+    else {
+        // set the pixel to black
+        SDL_SetRenderDrawColor(renderer_, 0, 0, 0, SDL_ALPHA_OPAQUE);
+        SDL_RenderDrawPoint(renderer_, x, y);
+    }
+
+    pixel_status_[x + (y * SCREEN_WIDTH)] = status;
+}
+
 void Renderer::render() {
+    set_pixel(10, 10, true);
     SDL_RenderPresent(renderer_);
+
 }
 
 void Renderer::quit() {
