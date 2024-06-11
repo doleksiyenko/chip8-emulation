@@ -21,15 +21,15 @@ class CPU {
 
     private:
         uint16_t pc; // program counters
-        std::stack<uint8_t> stack;
+        std::stack<uint8_t> stack_;
         // registers
-        uint16_t i_register;
-        std::array<uint8_t, 16> var_registers{}; 
-        uint8_t delay_timer;
+        uint16_t i_register_;
+        std::array<uint8_t, 16> var_registers_{}; 
+        uint8_t delay_timer_;
 
         // create pointers to all of the hardware components
-        Memory* chip8_memory;
-        Renderer* chip8_renderer; 
+        Memory* memory_;
+        Renderer* renderer_; 
 
 };
 

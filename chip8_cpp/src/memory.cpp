@@ -29,17 +29,17 @@ Memory::Memory() {
     };
     
     // copy font into the beginning of ram
-    std::copy(font.begin(), font.end(), memory.begin());
+    std::copy(font.begin(), font.end(), memory_.begin());
 }
 
 // overload the << operator so that we can print a representation of the memory object
 std::ostream& operator<<(std::ostream& stream, const Memory& obj) {
-    for (int i = 0; i < obj.memory.size(); i++) {
+    for (int i = 0; i < obj.memory_.size(); i++) {
         if (i % 8 == 0) {
             stream << std::endl << "0x" << std::hex << i << ":";
         }
 
-        uint8_t byte = obj.memory[i];
+        uint8_t byte = obj.memory_[i];
         stream << std::hex << unsigned(byte) << " ";
         
     } 
@@ -48,11 +48,11 @@ std::ostream& operator<<(std::ostream& stream, const Memory& obj) {
 }
 
 int Memory::get_from_memory(int memory_loc) {
-    return memory[memory_loc];
+    return memory_[memory_loc];
 }
 
 void Memory::set_memory(int memory_loc, uint8_t val) {
-    memory[memory_loc] = val; 
+    memory_[memory_loc] = val; 
 }
 
 void Memory::load_ROM(std::string file_path) {
@@ -71,7 +71,7 @@ void Memory::load_ROM(std::string file_path) {
     
     // read bytes from file one by one, and insert them into <location>
     while (rom_file.read(reinterpret_cast<char*>(&byte), sizeof(byte))) {
-        memory[location] = byte;
+        memory_[location] = byte;
         location++;
     }
  

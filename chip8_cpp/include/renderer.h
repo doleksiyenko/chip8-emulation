@@ -13,8 +13,8 @@ class Renderer {
         void render(); // draw out to the screen
         void quit();
     private:
-        SDL_Window* window; // window object which holds info about win pos, size, etc.
-        SDL_Renderer* renderer; // renderer object for rendering within the window obj
+        SDL_Window* window_; // window object which holds info about win pos, size, etc.
+        SDL_Renderer* renderer_; // renderer object for rendering within the window obj
 };
 
 #endif

@@ -10,25 +10,25 @@ Renderer::Renderer() {
     }
 
     // create the window + renderer 
-    window = SDL_CreateWindow("CHIP-8", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
+    window_ = SDL_CreateWindow("CHIP-8", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
     
     SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "linear");
-    renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED); 
+    renderer_ = SDL_CreateRenderer(window_, -1, SDL_RENDERER_ACCELERATED); 
 }
 
 void Renderer::clear_screen() {
     // set draw color to black and then paint the screen
-    SDL_SetRenderDrawColor(renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
-    SDL_RenderClear(renderer);
+    SDL_SetRenderDrawColor(renderer_, 0, 0, 0, SDL_ALPHA_OPAQUE);
+    SDL_RenderClear(renderer_);
 }
 
 void Renderer::render() {
-    SDL_RenderPresent(renderer);
+    SDL_RenderPresent(renderer_);
 }
 
 void Renderer::quit() {
     // quit out of all SDL processes
-    SDL_DestroyRenderer(renderer);
-    SDL_DestroyWindow(window);
+    SDL_DestroyRenderer(renderer_);
+    SDL_DestroyWindow(window_);
     SDL_Quit();
 }
