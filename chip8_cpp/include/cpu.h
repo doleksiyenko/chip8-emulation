@@ -20,8 +20,8 @@ class CPU {
         void decrement_timer();
 
     private:
-        uint16_t pc; // program counters
-        std::stack<uint8_t> stack_;
+        uint16_t pc_; // program counters
+        std::stack<uint16_t> stack_;
         // registers
         uint16_t i_register_;
         std::array<uint8_t, 16> var_registers_{}; 
