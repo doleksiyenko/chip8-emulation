@@ -97,6 +97,90 @@ void CPU::decode_execute(uint16_t instruction) {
             var_registers_[(instruction & 0x0f00) >> 8] += instruction & 0x00ff;
             break; 
         case 0x8000:
+            {
+                uint8_t vx = var_registers_[(instruction & 0x0f00) >> 8]; 
+                uint8_t vy = var_registers_[(instruction & 0x00f0) >> 4]; 
+
+                switch (instruction & 0x000f) {
+                    case 0x0:
+                        // set vx = vy
+                        var_registers_[(instruction & 0x0f00) >> 8] = var_registers_[(instruction & 0x00f0) >> 4];
+                        break;
+                    case 0x1:
+                        // set vx to the bitwise OR of vx and vy
+                        var_registers_[(instruction & 0x0f00) >> 8] = vx | vy;
+                        break;
+                    case 0x2:
+                        // bitwise AND
+                        var_registers_[(instruction & 0x0f00) >> 8] = vx & vy;
+                        break;
+                    case 0x3:
+                        // bitwise XOR 
+                        var_registers_[(instruction & 0x0f00) >> 8] = vx ^ vy;
+                        break;
+                    case 0x4:
+                        {
+                            // ADD VX and VY and affect the overflow flag
+                            uint16_t total = vx + vy;
+                            // if there is an overflow, set the flag
+                            if (total > 255) {
+                                var_registers_[0xf] = 1;                            
+                            }
+                            else {
+                                var_registers_[0xf] = 0;
+                            }
+                            var_registers_[(instruction & 0x0f00) >> 8] = static_cast<uint8_t>(vx + vy);
+                            break;
+                        }
+                    case 0x5:
+                        // set the carry flag to 0 if we underflow
+                        if (vx > vy) {
+                            var_registers_[0xf] = 0;
+                        }
+                        else {
+                            var_registers_[0xf] = 1;
+                        }
+                        // subtract: vx = vx - vy
+                        var_registers_[(instruction & 0x0f00) >> 8] = vx - vy;
+                        break;
+                    case 0x6:
+                        // shift vx one bit to the right and set carry flag appropriately
+                        if (vy % 2 == 0) {
+                            // last bit is zero
+                            var_registers_[0xf] = 0;
+                        }
+                        else {
+                            var_registers_[0xf] = 1;
+                        }
+
+                        var_registers_[(instruction & 0x0f00) >> 8] = vy >> 1;
+
+                        break;
+                    case 0x7:
+                        // set the carry flag to 0 if we underflow
+                        if (vy > vx) {
+                            var_registers_[0xf] = 0;
+                        }
+                        else {
+                            var_registers_[0xf] = 1;
+                        }
+                        // subtract: vx = vx - vy
+                        var_registers_[(instruction & 0x0f00) >> 8] = vy - vx;
+                        break;
+                    case 0xe:
+                        if ((vy & 0x80) >> 7 == 0) {
+                            // last bit is 0
+                            var_registers_[0xf] = 0;
+                        }
+                        else {
+                            var_registers_[0xf] = 1;
+                        }
+
+                        // shift vx (= vy) to the right (crop to 8 bits)
+                        var_registers_[(instruction & 0x0f00) >> 8] = (vy << 1);
+                        break;
+                } 
+            }
             break; 
         case 0x9000:
             {
