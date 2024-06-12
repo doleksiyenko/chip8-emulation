@@ -121,7 +121,6 @@ void CPU::decode_execute(uint16_t instruction) {
                         }
                     }
                 }
-                renderer_->render();
             }
             break; 
     }

@@ -1,5 +1,7 @@
 #include <SDL2/SDL.h>
 #include "renderer.h"
+#include <SDL_error.h>
+#include <SDL_log.h>
 #include <SDL_pixels.h>
 #include <SDL_render.h>
 #include <SDL_surface.h>
@@ -12,12 +14,21 @@ Renderer::Renderer() {
         std::cout << "Error: "  << SDL_GetError();
         exit(-1);
     }
-
+    SDL_LogSetAllPriority(SDL_LOG_PRIORITY_VERBOSE);
     // create the window + renderer 
     window_ = SDL_CreateWindow("CHIP-8", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
     
+    if (!window_) {
+        std::cout << "Error creating window: " << SDL_GetError() << std::endl;
+        exit(-1);
+    }
+
     SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "linear");
     renderer_ = SDL_CreateRenderer(window_, -1, SDL_RENDERER_ACCELERATED); 
+    if (!renderer_) {
+        std::cout << "Error creating renderer: " << SDL_GetError() << std::endl;
+        exit(-1);
+    }
 }
 
 void Renderer::clear_screen() {
@@ -35,6 +46,7 @@ void Renderer::set_pixel(unsigned int x, unsigned int y, bool status) {
         // set the pixel to white
         SDL_SetRenderDrawColor(renderer_, 255, 255, 255, SDL_ALPHA_OPAQUE);
         SDL_RenderDrawPoint(renderer_, x, y);
+        std::cout << SDL_GetError(); 
     } 
     else {
         // set the pixel to black
@@ -47,7 +59,6 @@ void Renderer::set_pixel(unsigned int x, unsigned int y, bool status) {
 
 void Renderer::render() {
     SDL_RenderPresent(renderer_);
-
 }
 
 void Renderer::quit() {
