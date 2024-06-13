@@ -2,6 +2,7 @@
 #include <climits>
 #include <cpu.h>
 #include <cstdint>
+#include <cstdlib>
 #include <iostream>
 #include <stack>
     
@@ -192,11 +193,16 @@ void CPU::decode_execute(uint16_t instruction) {
                 break; 
             }
         case 0xa000:
+            // set index register
             i_register_ = instruction & 0x0fff;
             break; 
         case 0xb000:
+            // jump with NNN + offset stored in v0
+            pc_ = var_registers_[0x0] + (instruction & 0x0fff);
             break; 
         case 0xc000:
+            // vx = rand & NN
+            var_registers_[(instruction & 0x0f00) >> 8] = (instruction & 0x00ff) & static_cast<uint8_t>((rand() % instruction & 0x00ff));
             break; 
         case 0xd000:
             {
