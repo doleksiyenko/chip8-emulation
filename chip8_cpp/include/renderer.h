@@ -20,6 +20,7 @@ class Renderer {
     private:
         SDL_Window* window_; // window object which holds info about win pos, size, etc.
         SDL_Renderer* renderer_; // renderer object for rendering within the window obj
+        SDL_Texture* texture_;
         std::array<bool, SCREEN_WIDTH * SCREEN_HEIGHT> pixel_status_{}; // array which holds if pixels are set on or off
 };
 

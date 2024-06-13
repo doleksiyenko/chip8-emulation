@@ -29,6 +29,8 @@ Renderer::Renderer() {
         std::cout << "Error creating renderer: " << SDL_GetError() << std::endl;
         exit(-1);
     }
+
+    texture_ = SDL_CreateTexture(renderer_, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, SCREEN_WIDTH, SCREEN_HEIGHT);
 }
 
 void Renderer::clear_screen() {
@@ -42,11 +44,11 @@ bool Renderer::get_pixel_is_on(unsigned int x, unsigned int y) {
 }
 
 void Renderer::set_pixel(unsigned int x, unsigned int y, bool status) {
+    SDL_SetRenderTarget(renderer_, texture_);
     if (status == true) {
         // set the pixel to white
         SDL_SetRenderDrawColor(renderer_, 255, 255, 255, SDL_ALPHA_OPAQUE);
         SDL_RenderDrawPoint(renderer_, x, y);
-        std::cout << SDL_GetError(); 
     } 
     else {
         // set the pixel to black
@@ -54,15 +56,21 @@ void Renderer::set_pixel(unsigned int x, unsigned int y, bool status) {
         SDL_RenderDrawPoint(renderer_, x, y);
     }
 
+    SDL_SetRenderTarget(renderer_, NULL);
+
     pixel_status_[x + (y * SCREEN_WIDTH)] = status;
 }
 
 void Renderer::render() {
+    // copy the texture to the screen
+    SDL_RenderCopy(renderer_, texture_, NULL, NULL);
+    // update the window
     SDL_RenderPresent(renderer_);
 }
 
 void Renderer::quit() {
     // quit out of all SDL processes
+    SDL_DestroyTexture(texture_);
     SDL_DestroyRenderer(renderer_);
     SDL_DestroyWindow(window_);
     SDL_Quit();

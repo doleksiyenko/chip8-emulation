@@ -28,7 +28,8 @@ void Chip8::run(std::string file_path) {
         }
 
         // drawing
-        renderer_.render();
+        renderer_.clear_screen(); // fill the screen with black
+        renderer_.render(); // load the updated texture to the blank screen
 
         // delay so that game runs at reasonable frame rate
         SDL_Delay(16);
