@@ -1,9 +1,12 @@
+#include <SDL_events.h>
+#include <SDL_keyboard.h>
 #include <climits>
 #include <cpu.h>
 #include <cstdint>
 #include <cstdlib>
 #include <iostream>
 #include <stack>
+#include <SDL2/SDL.h>
     
 #include <memory.h>
 #include <renderer.h>
@@ -249,6 +252,22 @@ void CPU::decode_execute(uint16_t instruction) {
                 break; 
             }
         case 0xe000:
+            // check if a key is being pressed, and if it is
+            SDL_Event event;
+            while (SDL_PollEvent(&event)) {
+                if (event.type == SDL_KEYDOWN) {
+                    // if the key that is being pressed is a valid key in the CHIP 8 system 
+                    const uint8_t* state = SDL_GetKeyboardState(nullptr);
+                    uint8_t scancode = memory_->hex_to_keycode((instruction & 0x0f00) >> 8);
+                    if (((instruction & 0x000f) == 0xe) && state[scancode]) {
+                        // the key being queried is being pressed
+                        pc_++;
+                    } else if (((instruction & 0x000f) == 0x1) && !state[scancode]) {
+                        // TODO: this checks if the key is not being pressed, but not if it is a valid key on the CHIP-8 system
+                        pc_++;
+                    }
+                }
+            }
             break;
         case 0xf000:
             break;
