@@ -11,6 +11,8 @@ set(SourceFiles
         src/renderer.cpp
         src/cpu.cpp
         src/memory.cpp
+        src/sound.cpp
+        include/sound.h
         include/memory.h
         include/cpu.h
         include/renderer.h
