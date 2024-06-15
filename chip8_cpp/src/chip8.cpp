@@ -1,3 +1,6 @@
+#include <SDL_events.h>
+#include <SDL_keyboard.h>
+#include <cstdio>
 #include <iostream>
 #include <SDL2/SDL.h>
 
@@ -31,6 +34,8 @@ void Chip8::run(std::string file_path) {
         renderer_.clear_screen(); // fill the screen with black
         renderer_.render(); // load the updated texture to the blank screen
 
+        // decrement sound and delay timer
+        cpu_.decrement_timer();
         // delay so that game runs at reasonable frame rate
         SDL_Delay(16);
     }

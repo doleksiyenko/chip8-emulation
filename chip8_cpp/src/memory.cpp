@@ -30,6 +30,12 @@ Memory::Memory() {
     
     // copy font into the beginning of ram
     std::copy(font.begin(), font.end(), memory_.begin());
+
+
+    // initialize the scancode to hex unordered map by flipping the hex to scancode translation table
+    for (auto i = hex_to_scancode_translation.begin(); i != hex_to_scancode_translation.end(); ++i) {
+        scancode_to_hex_translation[i->second] = i->first;
+    }
 }
 
 // overload the << operator so that we can print a representation of the memory object

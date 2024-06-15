@@ -13,11 +13,11 @@ class CPU {
     public:
         CPU(Memory* chip8_memory, Renderer* chip8_renderer);
         void cycle(); // run a single CPU cycle
+        void decrement_timer();
 
     private:
         uint16_t fetch(); // fetch instruction from memory
         void decode_execute(uint16_t instruction); // decode and then execute instruction
-        void decrement_timer();
 
     private:
         uint16_t pc_; // program counters

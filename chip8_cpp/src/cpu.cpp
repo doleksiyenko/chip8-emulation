@@ -1,10 +1,10 @@
 #include <SDL_events.h>
 #include <SDL_keyboard.h>
+#include <SDL_scancode.h>
 #include <climits>
 #include <cpu.h>
 #include <cstdint>
 #include <cstdlib>
-#include <iostream>
 #include <stack>
 #include <SDL2/SDL.h>
     
@@ -20,7 +20,9 @@ CPU::CPU(Memory* chip8_memory, Renderer* chip8_renderer) {
 }
 
 void CPU::decrement_timer() {
-    delay_timer_--;
+    if (delay_timer_ != 0) {
+        delay_timer_--;
+    }
 }
 
 void CPU::cycle() {
@@ -256,17 +258,69 @@ void CPU::decode_execute(uint16_t instruction) {
                 // check if a key is being pressed, and if it is
                 // if the key that is being pressed is a valid key in the CHIP 8 system 
                 const uint8_t* state = SDL_GetKeyboardState(nullptr);
-                uint8_t scancode = memory_->hex_to_keycode((instruction & 0x0f00) >> 8);
+                uint8_t scancode = memory_->hex_to_scancode_translation[(instruction & 0x0f00) >> 8];
                 if (((instruction & 0x000f) == 0xe) && state[scancode]) {
                     // the key being queried is being pressed
-                    pc_++;
+                    pc_ += 2;
                 } else if (((instruction & 0x000f) == 0x1) && !state[scancode]) {
                     // TODO: this checks if the key is not being pressed, but not if it is a valid key on the CHIP-8 system
-                    pc_++;
+                    pc_ += 2;
                 }
                 break;
             }
         case 0xf000:
+            switch (instruction & 0x00ff) {
+                case 0x07:
+                    // set the delay timer from the VX register
+                    delay_timer_ = var_registers_[(instruction & 0x0f00) >> 8];
+                    break;
+                case 0x15:
+                    // get the delay tier into the VX register
+                    var_registers_[(instruction & 0x0f00) >> 8] = delay_timer_;
+                    break;
+                case 0x18:
+                    // TODO : set the sound timer 
+                    break;
+                case 0x1e:
+                    // add value in vx to index register
+                    i_register_ += var_registers_[(instruction & 0x0f00) >> 8];
+                    break;
+                case 0x0a:
+                    // get key (blocking call)
+                    {
+                        bool key_up = false;
+                        SDL_Event event;
+                        while (SDL_PollEvent(&event)) {
+                            switch (event.type) {
+                                case SDL_QUIT:
+                                    renderer_->quit();
+                                    exit(0);
+                                case SDL_KEYUP:
+                                    uint8_t key_released_scancode = event.key.keysym.scancode;
+                                    if (memory_->scancode_to_hex_translation.find(key_released_scancode) != memory_->scancode_to_hex_translation.end()) {
+                                        // set register VX to the hex translation
+                                        var_registers_[0xf] = memory_->scancode_to_hex_translation[key_released_scancode];
+                                        key_up = true;
+                                        break;
+                                    }
+                            }
+                        }
+
+                        // made it through the event loop without triggering the SDL_KEYUP event, so made a blocking call
+                        if (!key_up) {
+                            pc_ -= 2;
+                        }
+                    }
+                    break;
+                case 0x29:
+                    break;
+                case 0x33:
+                    break;
+                case 0x55:
+                    break;
+                case 0x65:
+                    break;
+            }
             break;
     }
 }
