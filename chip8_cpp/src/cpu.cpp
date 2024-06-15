@@ -313,12 +313,37 @@ void CPU::decode_execute(uint16_t instruction) {
                     }
                     break;
                 case 0x29:
+                    // instruction : load font character
+                    // each font character is 5 bytes long, so take vx * 5 to find the appropriate character 
+                    i_register_ = memory_->get_from_memory(5 * var_registers_[(instruction & 0x0f00) >> 8]);
                     break;
                 case 0x33:
+                    // binary-coded decimal conversion (extract digits)
+                    {
+                        uint8_t vx = var_registers_[(instruction & 0x0f00) >> 8];
+                        memory_->set_memory(i_register_ + 0, static_cast<uint8_t>(vx / 100) % 10);
+                        memory_->set_memory(i_register_ + 1, static_cast<uint8_t>(vx / 10) % 10);
+                        memory_->set_memory(i_register_ + 2, static_cast<uint8_t>(vx / 1) % 10);
+                    }
                     break;
                 case 0x55:
+                    // store registers in memory up to register VX (inclusive) 
+                    {
+                        uint8_t x = (instruction & 0x0f00) >> 8;
+                        for (uint8_t i = 0; i <= x; i++) {
+                            uint8_t vx = var_registers_[(instruction & 0x0f00) >> 8];
+                            memory_->set_memory(i_register_ + i, vx);
+                        }
+                    }
                     break;
                 case 0x65:
+                    // load memory into registers
+                    {
+                        uint8_t x = (instruction & 0x0f00) >> 8;
+                        for (uint8_t i = 0; i <= x; i++) {
+                            var_registers_[i] = memory_->get_from_memory(i_register_ + i);
+                        }
+                    }
                     break;
             }
             break;
