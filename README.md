@@ -34,7 +34,8 @@ Navigate to the chip8_cpp folder, and create a build directory. CMake can be run
   cd chip8_cpp
   mkdir build
   cd build
-  cmake --build .
+  cmake -S .. -B .
+  make
 ```
 
 Finally, the emulator can be run through:
