@@ -4,6 +4,9 @@ Chip-8 is an interpreted programming language, initially developed for the COSMA
 
 This repository contains 2 implementations of Chip-8, one in Python, one in C++.
 
+# Controls
+All controls are run using the left hand side of the keyboard, mapping to the positions of the original COSMAC VIP (1,2,3,4, q, w, e, r, a, s, d, f , z, x c, v). In the C++ version this is implemented using scancodes and should therefore work with any keyboard layouts, however in the Python version this is implemented using key codes, and will only work with specifically these key mappings.
+
 ## Installation + Running
 
 ### Python
