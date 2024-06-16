@@ -1,6 +1,6 @@
 # Chip-8 Emulator for Python and C++
 ## Introduction
-Chip-8 is an interpreted programming language, initially developed for the COSMAC VIP. It is commonly used a a beginner's project in hardware emulation, with the goal of emulating the behaviour of the Chip-8.
+Chip-8 is an interpreted programming language, initially developed for the COSMAC VIP. It is commonly used a a beginner's project in hardware emulation.
 
 This repository contains 2 implementations of Chip-8, one in Python, one in C++.
 
