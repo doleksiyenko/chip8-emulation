@@ -26,4 +26,4 @@ find_package(SDL2_mixer REQUIRED)
 include_directories(${SDL2_MIXER_INCLUDE_DIRS})
 
 add_executable(${PROJECT_NAME} ${SourceFiles})
-target_link_libraries(${PROJECT_NAME} ${SDL2_LIBRARIES} ${SDL_MIXER_LIBRARIES})
+target_link_libraries(${PROJECT_NAME} SDL2::SDL2 SDL2_mixer::SDL2_mixer)

@@ -11,6 +11,7 @@
 #include "chip8.h"
 #include "renderer.h"
 #include "cpu.h"
+#include "sound.h"
 
 void Chip8::run(std::string file_path) {
     // load in the ROM provided as a command line argument
@@ -24,8 +25,6 @@ void Chip8::run(std::string file_path) {
     const std::chrono::duration<double> cpu_rate(1.0 / 700.0); // corresponds to 1/700 instructions / second
     const std::chrono::duration<double> frame_rate(1.0 / 60.0); // render only every 60 frames per second
     auto last_render = std::chrono::high_resolution_clock::now();
-    // std::chrono::duration<double> last_render(0);
-
     // main emulation loop
     // running starts intialized as true
     while (running_) {
@@ -54,10 +53,12 @@ void Chip8::run(std::string file_path) {
             renderer_.clear_screen(); // fill the screen with black
             renderer_.render(); // load the updated texture to the blank screen
             last_render = std::chrono::high_resolution_clock::now(); 
+
+            // decrement sound and delay timer at 60Hz
+            cpu_.decrement_timer();
+            sound_.decrement_timer();
         }
 
-        // decrement sound and delay timer
-        cpu_.decrement_timer();
 
         // delay so that game runs at reasonable frame rate
         auto cycle_timepoint_2 = std::chrono::high_resolution_clock::now();

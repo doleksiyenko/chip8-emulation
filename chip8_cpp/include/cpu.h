@@ -7,11 +7,12 @@
 
 #include <memory.h>
 #include <renderer.h>
+#include <sound.h>
 
 
 class CPU {
     public:
-        CPU(Memory* chip8_memory, Renderer* chip8_renderer);
+        CPU(Memory* chip8_memory, Renderer* chip8_renderer, Sound* chip8_sound);
         void cycle(); // run a single CPU cycle
         void decrement_timer();
 
@@ -30,6 +31,7 @@ class CPU {
         // create pointers to all of the hardware components
         Memory* memory_;
         Renderer* renderer_; 
+        Sound* sound_;
 
 };
 

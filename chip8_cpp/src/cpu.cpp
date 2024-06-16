@@ -11,12 +11,13 @@
 #include <memory.h>
 #include <renderer.h>
 
-CPU::CPU(Memory* chip8_memory, Renderer* chip8_renderer) {
+CPU::CPU(Memory* chip8_memory, Renderer* chip8_renderer, Sound* chip8_sound) {
     pc_ = 0x200; // start the program counter at the beginning of the loaded ROM
     i_register_ = 0x0;
 
     CPU::memory_ = chip8_memory;
-    CPU::renderer_ = chip8_renderer; 
+    CPU::renderer_ = chip8_renderer;
+    CPU::sound_ = chip8_sound;
 }
 
 void CPU::decrement_timer() {
@@ -275,11 +276,12 @@ void CPU::decode_execute(uint16_t instruction) {
                     delay_timer_ = var_registers_[(instruction & 0x0f00) >> 8];
                     break;
                 case 0x15:
-                    // get the delay tier into the VX register
+                    // get the delay timer into the VX register
                     var_registers_[(instruction & 0x0f00) >> 8] = delay_timer_;
                     break;
                 case 0x18:
-                    // TODO : set the sound timer 
+                    // set the sound timer to the value in vx
+                    sound_->set_timer(var_registers_[(instruction & 0x0f00) >> 8]); 
                     break;
                 case 0x1e:
                     // add value in vx to index register

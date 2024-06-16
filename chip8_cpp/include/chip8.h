@@ -3,6 +3,7 @@
 
 #include "renderer.h" 
 #include "memory.h"
+#include "sound.h"
 #include "cpu.h"
 
 class Chip8 {
@@ -14,7 +15,8 @@ class Chip8 {
         // hardware components
         Renderer renderer_;
         Memory memory_;
-        CPU cpu_{&memory_, &renderer_};
+        Sound sound_;
+        CPU cpu_{&memory_, &renderer_, &sound_};
 };
 
 #endif
