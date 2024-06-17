@@ -74,5 +74,6 @@ void Chip8::run(std::string file_path) {
     }
 
     // quit sdl - close the renderer and window 
+    sound_.quit();
     renderer_.quit();
 }
