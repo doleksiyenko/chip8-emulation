@@ -5,6 +5,7 @@
 #include <SDL_pixels.h>
 #include <SDL_render.h>
 #include <SDL_surface.h>
+#include <SDL_video.h>
 #include <cstdint>
 #include <iostream>
 
@@ -16,14 +17,14 @@ Renderer::Renderer() {
     }
     SDL_LogSetAllPriority(SDL_LOG_PRIORITY_VERBOSE);
     // create the window + renderer 
-    window_ = SDL_CreateWindow("CHIP-8", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
+    window_ = SDL_CreateWindow("CHIP-8", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE);
     
     if (!window_) {
         std::cout << "Error creating window: " << SDL_GetError() << std::endl;
         exit(-1);
     }
 
-    SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "linear");
+    SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "nearest");
     renderer_ = SDL_CreateRenderer(window_, -1, SDL_RENDERER_ACCELERATED); 
     if (!renderer_) {
         std::cout << "Error creating renderer: " << SDL_GetError() << std::endl;
